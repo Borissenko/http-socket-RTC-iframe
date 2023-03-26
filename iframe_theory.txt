@@ -1,0 +1,56 @@
+
+# Как перезагрузить содержимое iframe (https://habr.com/ru/post/488516/)
+- вы можете получить доступ к элементу окна iframe с помощью contentWindow:
+
+
+// Get the iframe
+const iframe = document.getElementById('myIframe');  
+
+iframe.contentWindow.location.reload()   // Reload the iframe
+
+
+# https://blog.theodo.com/2018/01/responsive-iframes-css-trick/
+# https://css-tricks.com/responsive-iframes/
+
+
+
+# DOUN
+const myiframe = document.getElementById('myIframe');
+myIframe.contentWindow.postMessage('message', '*');
+or
+this.$refs.frame.contentWindow.postMessage(message, "*")
+or
+    changeLocale() {
+      let locale = this.locale;
+      let messageType = "ep-locale";
+      let message = {messageType, locale};
+      this.$refs.frame.contentWindow.postMessage(message, "*");
+    },
+
+И послушайте его в iframe:
+window.onmessage = function(event){
+    if (event.data == 'message') {
+        console('Message received!');
+    }
+}
+or
+  created () {
+    window.addEventListener('message', async (event) => {
+      if (event.data.messageType === 'ep-token') {
+        await this.$store.dispatch('token', event.data.token)
+        await AuthService.auth()
+      }
+    })
+  }
+
+
+
+# UP
+window.top.postMessage('reply', '*')
+
+И прослушай это у родителя:
+window.onmessage = function(event){
+    if (event.data == 'reply') {
+        console('Reply received!');
+    }
+};
